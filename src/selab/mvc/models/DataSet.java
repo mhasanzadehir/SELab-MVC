@@ -19,6 +19,10 @@ public class DataSet<T extends Model> {
         return set.get(key);
     }
 
+    public void remove(String key) {
+        set.remove(key);
+    }
+
     public ArrayList<T> getAll() {
         return new ArrayList(set.values());
     }

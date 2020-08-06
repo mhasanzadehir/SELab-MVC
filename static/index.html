@@ -228,6 +228,7 @@
             contentType: "application/json",
             success: function (data) {
                 loadCourses();
+                loadStudents();
             },
             error: function (jqxhr) {
                 alert(JSON.parse(jqxhr.responseText).message);
@@ -246,6 +247,7 @@
             contentType: "application/json",
             success: function (data) {
                 loadCourses();
+                loadStudents();
             },
             error: function (jqxhr) {
                 alert(JSON.parse(jqxhr.responseText).message);

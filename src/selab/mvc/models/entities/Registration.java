@@ -1,6 +1,7 @@
 package selab.mvc.models.entities;
 
 import selab.mvc.models.Model;
+import selab.mvc.models.Utils;
 import selab.mvc.models.ValidationUtils;
 
 public class Registration implements Model {
@@ -10,7 +11,7 @@ public class Registration implements Model {
 
     @Override
     public String getPrimaryKey() {
-        return this.studentNo + "-" + this.courseNo;
+        return Utils.generateRegistrationKey(this);
     }
 
 

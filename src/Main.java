@@ -27,7 +27,9 @@ public class Main {
         app.addController("/courses/add", new AddCourseController(dataContext));
         app.addController("/courses/remove", new RemoveCourseController(dataContext));
 
+        // Registration Controller
         app.addController("/students/courses/add", new AddStudentToCourseController(dataContext));
+
 
         app.start();
     }

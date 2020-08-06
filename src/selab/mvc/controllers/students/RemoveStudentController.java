@@ -4,6 +4,8 @@ import org.json.JSONObject;
 import selab.mvc.controllers.Controller;
 import selab.mvc.models.DataContext;
 import selab.mvc.models.DataSet;
+import selab.mvc.models.Utils;
+import selab.mvc.models.entities.Registration;
 import selab.mvc.models.entities.Student;
 import selab.mvc.views.JsonView;
 import selab.mvc.views.View;
@@ -16,9 +18,12 @@ import java.util.Map;
 public class RemoveStudentController extends Controller {
 
     DataSet<Student> students;
+    DataSet<Registration> registrations;
+
     public RemoveStudentController(DataContext dataContext) {
         super(dataContext);
         students = dataContext.getStudents();
+        registrations = dataContext.getRegistrations();
     }
 
     @Override
@@ -29,10 +34,16 @@ public class RemoveStudentController extends Controller {
         JSONObject input = readJson(body);
         String studentNo = input.getString("studentNo");
 
-        // TODO: Add codes for removing the student
+        students.remove(studentNo);
 
-        return null;
-    }
+        registrations.getAll()
+                .stream()
+                .filter(it -> it.getStudentNo().equals(studentNo))
+                .forEach(it -> registrations.remove(Utils.generateRegistrationKey(it)));
+
+        Map<String, String> result = new HashMap<>();
+        result.put("success", "true");
+        return new JsonView(new JSONObject(result));    }
 
     @Override
     protected View getExceptionView(Exception exception) {
