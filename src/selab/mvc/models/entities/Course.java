@@ -7,6 +7,7 @@ import sun.misc.Regexp;
 
 import java.util.OptionalDouble;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Course implements Model {
     private String title;
@@ -87,8 +88,12 @@ public class Course implements Model {
     }
 
     public String getStudents() {
-        // TODO: Return a comma separated list of student names
-        return "-";
+        DataSet<Registration> registrations = DataContext.getInstance().getRegistrations();
+        return registrations.getAll()
+                .stream()
+                .filter(registration -> registration.getCourseNo().equals(this.courseNo))
+                .map(Registration::getStudentNo)
+                .collect(Collectors.joining(","));
     }
 
     /**

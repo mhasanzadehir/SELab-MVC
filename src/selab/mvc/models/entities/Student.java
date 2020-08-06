@@ -6,6 +6,7 @@ import selab.mvc.models.Model;
 
 import java.util.OptionalDouble;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Student implements Model {
     private String name;
@@ -38,8 +39,12 @@ public class Student implements Model {
     }
 
     public String getCourses() {
-        // TODO: Return a comma separated list of course names
-        return "-";
+        DataSet<Registration> registrations = DataContext.getInstance().getRegistrations();
+        return registrations.getAll()
+                .stream()
+                .filter(registration -> registration.getStudentNo().equals(this.studentNo))
+                .map(Registration::getCourseNo)
+                .collect(Collectors.joining(","));
     }
 
     /**
