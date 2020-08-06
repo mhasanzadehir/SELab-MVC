@@ -3,6 +3,7 @@ package selab.mvc.models.entities;
 import selab.mvc.models.DataContext;
 import selab.mvc.models.DataSet;
 import selab.mvc.models.Model;
+import selab.mvc.models.ValidationUtils;
 import sun.misc.Regexp;
 
 import java.util.OptionalDouble;
@@ -31,7 +32,7 @@ public class Course implements Model {
     }
 
     public void setCourseNo(String value) {
-        if (!validateCourseNo(value))
+        if (!ValidationUtils.validateCourseNo(value))
             throw new IllegalArgumentException("Format is not correct");
 
         this.courseNo = value;
@@ -42,7 +43,7 @@ public class Course implements Model {
     }
 
     public void setStartTime(String value) {
-        if (!validateTime(value))
+        if (!ValidationUtils.validateTime(value))
             throw new IllegalArgumentException("Invalid time format.");
 
         if (this.endTime != null && compareTime(value, this.endTime) != -1)
@@ -56,7 +57,7 @@ public class Course implements Model {
     }
 
     public void setEndTime(String value) {
-        if (!validateTime(value))
+        if (!ValidationUtils.validateTime(value))
             throw new IllegalArgumentException("Invalid time format");
 
         if (this.startTime != null && compareTime(value, this.startTime) != 1)
@@ -94,24 +95,6 @@ public class Course implements Model {
                 .filter(registration -> registration.getCourseNo().equals(this.courseNo))
                 .map(Registration::getStudentNo)
                 .collect(Collectors.joining(","));
-    }
-
-    /**
-     * @param value The value to be validated as course number
-     * @return true, if value is in a correct format
-     */
-    private boolean validateCourseNo(String value) {
-        Pattern pattern = Pattern.compile("^\\d{5}-\\d$");
-        return pattern.matcher(value).find();
-    }
-
-    /**
-     * @param value The time to be checked
-     * @return true, if the format of the input is appropriate for a time, like
-     */
-    private boolean validateTime(String value) {
-        Pattern pattern = Pattern.compile("^((0|1)\\d|2[0-4]):([0-5]\\d)$");
-        return pattern.matcher(value).find();
     }
 
     /**

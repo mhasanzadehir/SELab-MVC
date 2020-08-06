@@ -3,6 +3,7 @@ package selab.mvc.models.entities;
 import selab.mvc.models.DataContext;
 import selab.mvc.models.DataSet;
 import selab.mvc.models.Model;
+import selab.mvc.models.ValidationUtils;
 
 import java.util.OptionalDouble;
 import java.util.regex.Pattern;
@@ -21,7 +22,7 @@ public class Student implements Model {
     public String getName() { return this.name; }
 
     public void setStudentNo(String value) {
-        if (!validateStudentNo(value))
+        if (!ValidationUtils.validateStudentNo(value))
             throw new IllegalArgumentException("The format is not correct");
 
         this.studentNo = value;
@@ -47,13 +48,4 @@ public class Student implements Model {
                 .collect(Collectors.joining(","));
     }
 
-    /**
-     *
-     * @param studentNo Student number to be checeked
-     * @return true, if the format of the student number is correct
-     */
-    private boolean validateStudentNo(String studentNo) {
-        Pattern pattern = Pattern.compile("^[8-9]\\d{7}$");
-        return pattern.matcher(studentNo).find();
-    }
 }

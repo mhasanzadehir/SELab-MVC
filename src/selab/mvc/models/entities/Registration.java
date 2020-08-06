@@ -1,6 +1,7 @@
 package selab.mvc.models.entities;
 
 import selab.mvc.models.Model;
+import selab.mvc.models.ValidationUtils;
 
 public class Registration implements Model {
     private String studentNo;
@@ -12,15 +13,25 @@ public class Registration implements Model {
         return this.studentNo + "-" + this.courseNo;
     }
 
-    public void setCourseNo(String courseNo) {
-        this.courseNo = courseNo;
+
+    public void setCourseNo(String value) {
+        if (!ValidationUtils.validateCourseNo(value))
+            throw new IllegalArgumentException("Format is not correct");
+
+        this.courseNo = value;
     }
 
-    public void setStudentNo(String studentNo) {
-        this.studentNo = studentNo;
+    public void setStudentNo(String value) {
+        if (!ValidationUtils.validateStudentNo(value))
+            throw new IllegalArgumentException("The format is not correct");
+
+        this.studentNo = value;
     }
 
     public void setPoint(double point) {
+        if (!ValidationUtils.validatePoint(point))
+            throw new IllegalArgumentException("Format is not correct");
+
         this.point = point;
     }
 
@@ -35,4 +46,5 @@ public class Registration implements Model {
     public double getPoint() {
         return point;
     }
+
 }
