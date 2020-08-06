@@ -1,8 +1,11 @@
 package selab.mvc.models.entities;
 
+import selab.mvc.models.DataContext;
+import selab.mvc.models.DataSet;
 import selab.mvc.models.Model;
 import sun.misc.Regexp;
 
+import java.util.OptionalDouble;
 import java.util.regex.Pattern;
 
 public class Course implements Model {
@@ -18,8 +21,13 @@ public class Course implements Model {
         return this.courseNo;
     }
 
-    public void setTitle(String value) { this.title = value; }
-    public String getTitle() { return this.title; }
+    public void setTitle(String value) {
+        this.title = value;
+    }
+
+    public String getTitle() {
+        return this.title;
+    }
 
     public void setCourseNo(String value) {
         if (!validateCourseNo(value))
@@ -27,7 +35,10 @@ public class Course implements Model {
 
         this.courseNo = value;
     }
-    public String getCourseNo() { return this.courseNo; }
+
+    public String getCourseNo() {
+        return this.courseNo;
+    }
 
     public void setStartTime(String value) {
         if (!validateTime(value))
@@ -38,7 +49,10 @@ public class Course implements Model {
 
         this.startTime = value;
     }
-    public String getStartTime() { return this.startTime; }
+
+    public String getStartTime() {
+        return this.startTime;
+    }
 
     public void setEndTime(String value) {
         if (!validateTime(value))
@@ -50,7 +64,9 @@ public class Course implements Model {
         this.endTime = value;
     }
 
-    public String getEndTime() { return this.endTime; }
+    public String getEndTime() {
+        return this.endTime;
+    }
 
     public void setWeekday(Weekday value) {
         this.weekday = value;
@@ -60,9 +76,14 @@ public class Course implements Model {
         return this.weekday.name();
     }
 
-    public float getAverage() {
-        // TODO: Calculate and return the average of the points
-        return 0;
+    public double getAverage() {
+        DataSet<Registration> registrations = DataContext.getInstance().getRegistrations();
+        OptionalDouble result = registrations.getAll()
+                .stream()
+                .filter(registration -> registration.getCourseNo().equals(this.courseNo))
+                .mapToDouble(Registration::getPoint)
+                .average();
+        return result.isPresent() ? result.getAsDouble() : 0;
     }
 
     public String getStudents() {
@@ -71,7 +92,6 @@ public class Course implements Model {
     }
 
     /**
-     *
      * @param value The value to be validated as course number
      * @return true, if value is in a correct format
      */
@@ -81,7 +101,6 @@ public class Course implements Model {
     }
 
     /**
-     *
      * @param value The time to be checked
      * @return true, if the format of the input is appropriate for a time, like
      */
@@ -91,7 +110,6 @@ public class Course implements Model {
     }
 
     /**
-     *
      * @param time1 First time
      * @param time2 Second time
      * @return If time1 > time2, returns 1, if time1 < time2 returns -1, otherwise returns 0

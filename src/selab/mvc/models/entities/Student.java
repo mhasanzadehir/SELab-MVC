@@ -1,7 +1,10 @@
 package selab.mvc.models.entities;
 
+import selab.mvc.models.DataContext;
+import selab.mvc.models.DataSet;
 import selab.mvc.models.Model;
 
+import java.util.OptionalDouble;
 import java.util.regex.Pattern;
 
 public class Student implements Model {
@@ -24,9 +27,14 @@ public class Student implements Model {
     }
     public String getStudentNo() { return this.studentNo; }
 
-    public float getAverage() {
-        // TODO: Calculate and return the average of the points
-        return 0;
+    public double getAverage() {
+        DataSet<Registration> registrations = DataContext.getInstance().getRegistrations();
+        OptionalDouble result = registrations.getAll()
+                .stream()
+                .filter(registration -> registration.getStudentNo().equals(this.studentNo))
+                .mapToDouble(Registration::getPoint)
+                .average();
+        return result.isPresent() ? result.getAsDouble() : 0;
     }
 
     public String getCourses() {

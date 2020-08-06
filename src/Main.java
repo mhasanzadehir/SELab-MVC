@@ -13,7 +13,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         App app = new App(8001);
-        DataContext dataContext = new DataContext();
+        DataContext dataContext = DataContext.getInstance();
 
         app.addController("/", new IndexController());
 
